@@ -13,13 +13,14 @@ import ManagedSettings
 struct DashboardView: View {
     @EnvironmentObject private var navigationState: NavigationState
     @StateObject private var monitoringManager = MonitoringManager.shared
-    
+    @StateObject private var appSelectionModel = AppSelectionModel() // Add this
+
     var body: some View {
         VStack(spacing: 20) {
             Text("Dashboard")
                 .font(.largeTitle)
                 .bold()
-            
+
             if monitoringManager.usageData.isEmpty {
                 Text("No usage data available yet")
                     .foregroundColor(.gray)
@@ -34,6 +35,9 @@ struct DashboardView: View {
             }
         }
         .padding()
+        .onAppear {
+            appSelectionModel.applySelection() // Apply selections when view appears
+        }
     }
     
     private func formatDuration(_ duration: TimeInterval) -> String {
